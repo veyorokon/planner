@@ -16,9 +16,9 @@ int main()
 	State s3;
 	Node n1;
 
-	s1.location[0] = 12;
+	s1.location[0][1] = 12;
 	s2 = s1;
-	s1.location[0] = 10099;
+	s1.location[0][1] = 10099;
 	cout << s2.location[0] << endl;
 
 	//States are passed by reference on Relation Calls

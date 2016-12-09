@@ -1,3 +1,6 @@
+#pragma once
+#include "stdafx.h"
+#include "State.h"
 #include "Node.h"
 
 /*Default constructor*/
@@ -13,11 +16,6 @@ Node::Node(State currentState, Node * par)
 {
 	parent = par;
 	current = currentState;
-}
-
-State & Node::PickUp(State *, block)
-{
-	// TODO: insert return statement here
 }
 
 State& Node::PickUp(State * s1, block block1) {
@@ -42,9 +40,7 @@ State& Node::PickUp(State * s1, block block1) {
 State& Node::PutDown(State * s1, block block1, int newLocation) {
 	State newState = *s1;
 
-	if (newState.getHolding() == block1 && newState.location[newLocation] == -1) {
-		
-	}
+	
 	
 	return newState;
 }
