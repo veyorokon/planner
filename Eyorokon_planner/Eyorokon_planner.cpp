@@ -5,11 +5,13 @@
 #include <iostream>
 #include "Tree.h"
 #include "Node.h"
-
+#include "Tree.h"
 using namespace std;
 
 
 State * genStart();
+State * genGoal();
+
 int main()
 {
 	/*
@@ -50,6 +52,7 @@ int main()
 	cout << "Test location " << newState->GetLocation(4) << endl;
 	*/
 
+	/*
 	//Test getAllStates
 	State sTest = *genStart();
 	State sTest2 = sTest;
@@ -67,7 +70,18 @@ int main()
 	sTest.NotLocation(&sTest, 1, 2);
 	sTest.Location(&sTest, 1, 0);
 	cout << "Testing state overload == " << (sTest == sTest2) << endl;
+	*/
 
+	State sTest = *genStart();
+	State gTest = *genGoal();
+	Tree planner(&sTest, gTest);
+	
+	Node * planNode = planner.plan();
+	
+	while (planNode != NULL) {
+		cout << planNode << endl;
+		planNode = planNode->parent;
+	}
 	system("pause");
     return 0;
 }
@@ -91,6 +105,34 @@ State * genStart() {
 	s1.Location(&s1, 5, 3);//F Location 3
 	s1.Location(&s1, 6, 3);//G Location 3
 
+	s1.Table(&s1, 2);//C Table
+	s1.Table(&s1, 4);//E Table
+	s1.Table(&s1, 6);//G Table
+
+	return &s1;
+}
+
+State * genGoal() {
+	State s1;
+	s1.On(&s1, 1, 2);//B on C
+	s1.On(&s1, 3, 4);//D on E
+	s1.On(&s1, 5, 6);//F on G
+
+	s1.Clear(&s1, 0);//A clear
+	s1.Clear(&s1, 1);//B clear
+	s1.Clear(&s1, 3);//D clear
+	s1.Clear(&s1, 5);//F clear
+
+	
+	s1.Location(&s1, 1, 0);//B Location 0
+	s1.Location(&s1, 2, 0);//C Location 0
+	s1.Location(&s1, 3, 1);//D Location 1
+	s1.Location(&s1, 4, 1);//E Location 1
+	s1.Location(&s1, 0, 2);//A Location 2
+	s1.Location(&s1, 5, 3);//F Location 3
+	s1.Location(&s1, 6, 3);//G Location 3
+
+	s1.Table(&s1, 0);//A Table
 	s1.Table(&s1, 2);//C Table
 	s1.Table(&s1, 4);//E Table
 	s1.Table(&s1, 6);//G Table

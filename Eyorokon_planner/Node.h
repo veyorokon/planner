@@ -7,10 +7,12 @@ using namespace std;
 class Node
 {
 public:
-	vector<Node *> futureStates;
+	//vector<Node *> futureStates;
 	Node * parent;
+	Node * leftChild;
+	Node * rightSibling;
 	State current;
-	//string * steps[];
+	//vector<string> stepsToGetHere;
 	Node();
 	~Node();
 	Node(State, Node *);
@@ -18,6 +20,8 @@ public:
 	State Node::PutDown(const State * , block, int);
 	State Node::UnStack(const State *, block);
 	State Node::Stack(const State *, block, block);
-	vector<Node *>& Node::getAllStates(block, block);
+	void Node::getAllStates(block, block);
+	void Node::Insert(Node * );
+	//friend ostream& operator<<(std::ostream& os, const Node& obj);
 };
 

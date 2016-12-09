@@ -6,6 +6,11 @@ using namespace std;
 /*Default constructor*/
 Node::Node() {
 	parent = NULL;
+	leftChild = NULL;
+	rightSibling = NULL;
+	State nState;
+	current = nState;
+
 	//*steps[0] = "";
 }
 
@@ -15,9 +20,22 @@ Node::~Node()
 
 Node::Node(State currentState, Node * par)
 {
-	//*steps[0] = "";
 	parent = par;
 	current = currentState;
+}
+void Node::Insert(Node * futureState) {
+	if (leftChild == NULL) {
+		leftChild = futureState;
+		leftChild->parent = this; // UPdate parent pointers for new child
+	}
+	else {
+		Node * ptr = leftChild;
+		while (ptr->rightSibling != NULL)
+			ptr = ptr->rightSibling;
+		ptr->rightSibling = futureState;
+		futureState->parent = this; //Update parent pointers for new child
+	}
+
 }
 
 State Node::PickUp(const State * s1, block block1) {
@@ -38,10 +56,16 @@ State Node::PickUp(const State * s1, block block1) {
 		updated = true;
 	}
 	if (updated) {
+		/*
+		string step = ("Pickup(block" + to_string(block1) + ")");
+		stepsToGetHere.push_back(step);
+		*/
 		futureState = new Node(newState, this);
 		//UPDATE STEPS
-		//*(futureState->steps[0]) = ("Pickup(block" + to_string(block1) + ")");
-		futureStates.push_back(futureState);
+		//
+		//futureStates.push_back(futureState);
+		//ADD TO LIST OF CHILDREN
+		Insert(futureState);
 	}
 	return newState;
 }
@@ -64,11 +88,15 @@ State Node::PutDown(const State * s1, block block1, int newLocation) {
 		updated = true;
 	}
 	if (updated) {
+		//string step = ("Pickup(block" + to_string(block1) + ")");
 		futureState = new Node(newState, this);
 		//UPDATE STEPS
-		//*(futureState->steps[0]) = 
-		//	("PutDown(block" + to_string(block1) + ", location" + to_string(newLocation) + ")");
-		futureStates.push_back(futureState);
+		/*
+		string steps = 
+		("PutDown(block" + to_string(block1) + ", location" + to_string(newLocation) + ")");
+		stepsToGetHere.push_back(steps);
+		*/
+		Insert(futureState);
 	}
 	return newState;
 }
@@ -94,10 +122,14 @@ State Node::UnStack(const State * s1, block block1) {
 		updated = true;
 	}
 	if (updated) {
+		//string step = ("Pickup(block" + to_string(block1) + ")");
 		futureState = new Node(newState, this);
 		//UPDATE STEPS
-		//*(futureState->steps[0]) = ("UnStack(block" + to_string(block1) + ")");
-		futureStates.push_back(futureState);
+		/*
+		string steps = ("UnStack(block" + to_string(block1) + ")");
+		stepsToGetHere.push_back(steps);
+		*/
+		Insert(futureState);
 	}
 	return newState;
 }
@@ -123,15 +155,19 @@ State Node::Stack(const State * s1, block block1, block block2) {
 		updated = true;
 	}
 	if (updated) {
+		//string step = ("Pickup(block" + to_string(block1) + ")");
 		futureState = new Node(newState, this);
 		//UPDATE STEPS
-		//*(futureState->steps[0]) = ("Stack(block" + to_string(block1) + ", block" + to_string(block2) + ")");
-		futureStates.push_back(futureState);
+		/*
+		string steps = ("Stack(block" + to_string(block1) + ", block" + to_string(block2) + ")");
+		stepsToGetHere.push_back(steps);
+		*/
+		Insert(futureState);
 	}
 	return newState;
 }
 
-vector<Node *>& Node::getAllStates(block first, block second) {
+void Node::getAllStates(block first, block second) {
 	PickUp(&current, first);
 	PutDown(&current, first, 0);
 	PutDown(&current, first, 1);
@@ -148,6 +184,12 @@ vector<Node *>& Node::getAllStates(block first, block second) {
 		UnStack(&current, second);
 		Stack(&current, second, first);
 	}
-
-	return futureStates;
+	
 }
+/*
+ostream & operator<<(std::ostream & os, const Node & obj)
+{
+	os << "Node Step: " << obj.stepsToGetHere[0] << endl;
+	return os;
+}
+*/
