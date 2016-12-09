@@ -18,7 +18,7 @@ Node::Node(State currentState, Node * par)
 	current = currentState;
 }
 
-State Node::PickUp(State * s1, block block1) {
+State Node::PickUp(const State * s1, block block1) {
 	State newState = *s1;
 	int oldLocation = newState.GetLocation(block1);
 	//IF BLOCK CLEAR, IF NOT HOLDING, NOT ON
@@ -34,7 +34,7 @@ State Node::PickUp(State * s1, block block1) {
 	return newState;
 }
 
-State Node::PutDown(State * s1, block block1, int newLocation) {
+State Node::PutDown(const State * s1, block block1, int newLocation) {
 	State newState = *s1;
 	//PLACE IN EMPTY LOCATION
 	if (newState.GetHolding() == block1 && newState.IsLocationEmpty(newLocation)) {
@@ -50,7 +50,7 @@ State Node::PutDown(State * s1, block block1, int newLocation) {
 	return newState;
 }
 
-State Node::UnStack(State * s1, block block1) {
+State Node::UnStack(const State * s1, block block1) {
 	State newState = *s1;
 	int oldLocation = newState.GetLocation(block1);
 	//CHECK BLOCK ON, BLOCK CLEAR
@@ -68,7 +68,7 @@ State Node::UnStack(State * s1, block block1) {
 	return newState;
 }
 
-State Node::Stack(State * s1, block block1, block block2) {
+State Node::Stack(const State * s1, block block1, block block2) {
 	State newState = *s1;
 	int location = newState.GetLocation(block2);
 	//CHECK HOLDING BLOCK
