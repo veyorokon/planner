@@ -20,17 +20,13 @@ Node::Node(State currentState, Node * par)
 
 State Node::PickUp(State * s1, block block1) {
 	State newState = *s1;
-	int oldLocation = newState.GetLocation(s1, block1);
-	//IF BLOCK CLEAR
-	if (newState.IsBlockClear(block1)) {
+	int oldLocation = newState.GetLocation(block1);
+	//IF BLOCK CLEAR, IF BLOCK NOT ON
+	if (newState.IsBlockClear(block1) && newState.IsBlockTable(block1)) {
 		//UPDATE HOLDING
 		newState.Holding(&newState, block1); // set holding to block1
 		//UPDATE NOT CLEAR
 		newState.NotClear(&newState, block1);//set clear to false
-		if (newState.GetOn(&newState, block1) != -1) {//If the block was ontop of another
-			block underneath = newState.GetOn(&newState, block1);
-			newState.Clear(&newState, underneath);
-		}
 		//UPDATE TABLE			
 		newState.NotTable(&newState, block1);
 		newState.NotLocation(&newState, block1, oldLocation);
@@ -50,6 +46,43 @@ State Node::PutDown(State * s1, block block1, int newLocation) {
 		newState.NotHolding(&newState);
 		//PLACE BLOCK
 		newState.Location(&newState, block1, newLocation);
+	}
+	return newState;
+}
+
+State Node::UnStack(State * s1, block block1) {
+	State newState = *s1;
+	int oldLocation = newState.GetLocation(block1);
+	//CHECK BLOCK ON, BLOCK CLEAR
+	if (newState.IsBlockClear(block1) && newState.GetOn(block1) != -1) {
+		//UPDATE HOLDING
+		newState.Holding(&newState, block1); // set holding to block1
+		//UPDATE NOT CLEAR
+		newState.NotClear(&newState, block1);//set clear to false
+		//UPDATE UNDERNEATH BLOCK
+		block underneath = newState.GetOn(block1);
+		newState.Clear(&newState, underneath);
+		//UPDATE LOCATION			
+		newState.NotLocation(&newState, block1, oldLocation);
+	}
+	return newState;
+}
+
+State Node::Stack(State * s1, block block1, block block2) {
+	State newState = *s1;
+	int location = newState.GetLocation(block2);
+	//CHECK HOLDING BLOCK
+	if (newState.GetHolding() == block1 && newState.IsBlockClear(block2)) {
+		//NOT HOLDING
+		newState.NotHolding(&newState); 
+		//UPDATE NOT CLEAR
+		newState.NotClear(&newState, block2);//set clear to false
+		//UPDATE LOCATION
+		newState.Location(&newState, block1, block2);
+		//UPDATE ON
+		newState.On(&newState, block1, block2);
+		//UPDATE TOP CLEAR
+		newState.Clear(&newState, block1);
 	}
 	return newState;
 }

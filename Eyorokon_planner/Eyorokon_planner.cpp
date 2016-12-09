@@ -19,7 +19,7 @@ int main()
 	s1.Location(&s1, 2, 3);
 	s2 = s1;
 	s1.Location(&s1, 2, 4);
-	cout << s2.GetLocation(&s1, 2) << endl;
+	cout << s2.GetLocation( 2) << endl;
 
 	//States are passed by reference on Relation Calls
 	s1.Clear(&s1, 3);
@@ -30,13 +30,15 @@ int main()
 	//Test holding pointers
 	s1.Clear(&s1, 2);
 	n1.current = s1;
-	State newState;
-	newState = n1.PickUp(&n1.current, 2);
+	State * newState;
+	newState = &(n1.PickUp(&n1.current, 2));
 	
-	cout << "Node holding: " << newState.GetHolding() << endl;
+	cout << "Node holding: " << newState->GetHolding() << endl;
 	cout << "State 1 holding: " << s1.GetHolding() << endl;
-	cout << "Test empty location" << newState.IsLocationEmpty(1)<<endl;
+	cout << "Test empty location: " << newState->IsLocationEmpty(4)<<endl;
+	newState = &(n1.UnStack(newState, 2));
 
+	cout << "Test unstack " << newState->GetHolding() << endl;
 	system("pause");
     return 0;
 }

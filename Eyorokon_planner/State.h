@@ -58,7 +58,7 @@ public:
 		return s1;
 	}
 
-	block GetOn(State* s1, block block1) {
+	block GetOn(block block1) {
 		return on[block1];
 	}
 
@@ -104,10 +104,10 @@ public:
 		return s1;
 	}
 
-	int GetLocation(State * s1, block block1) {
+	int GetLocation( block block1) {
 		int currentLocation;
 		for (int i = 0; i < 4; i++) { // 4 locations
-			if (s1->location[i][block1] == 1) return i; //check column for block
+			if (location[i][block1] == 1) return i; //check column for block
 		}
 	}
 
@@ -123,6 +123,10 @@ public:
 		for (int j = 0; j < SIZE; j++)
 			if (location[loc][j] != -1) return false;
 		return true;
+	}
+
+	bool IsBlockTable(block block1) {
+		return table[block1];
 	}
 	/*
 	int operator == (State const state) {
