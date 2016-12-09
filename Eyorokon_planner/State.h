@@ -12,7 +12,7 @@
 #define l2 1
 #define l3 2
 #define l4 3
-
+using namespace std;
 class State
 {
 private:
@@ -33,8 +33,8 @@ public:
 			for(int j=0; j< SIZE -2; j++)
 				location[j][i] = -1;
 			on[i] = -1;
-			table[i] = -1;
-			clear[i] = -1;
+			table[i] = 0;
+			clear[i] = 0;
 		}
 	}
 
@@ -62,7 +62,7 @@ public:
 		return on[block1];
 	}
 
-	State* NotOn(State* s1, block block1, block block2) {
+	State* NotOn(State* s1, block block1) {
 		s1->on[block1] = -1;
 		return s1;
 	}
