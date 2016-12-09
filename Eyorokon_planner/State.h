@@ -24,9 +24,6 @@ private:
 	Relation clear[7];//Relation clear
 public:
 
-
-	
-
 	State()
 	{		
 		for (int i = 0; i < SIZE; i++) {
@@ -131,11 +128,12 @@ public:
 	}
 	
 	bool operator == (const State state) {
+		if (location == NULL) return false;
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < SIZE; j++)
 				if (location[i][j] != state.location[i][j]) {
-					//cout << "Index: " + to_string(i) + ", " + to_string(j) << endl;
-					//cout << "Ours: " + to_string(location[i][j]) + ", " + to_string(state.location[i][j]);
+					cout << "Index: " + to_string(i) + ", " + to_string(j) << endl;
+					cout << "Ours: " + to_string(location[i][j]) + ", " + to_string(state.location[i][j]);
 					return false;
 				}
 		}

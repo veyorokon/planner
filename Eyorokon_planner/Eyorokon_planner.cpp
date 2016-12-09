@@ -74,14 +74,10 @@ int main()
 
 	State sTest = *genStart();
 	State gTest = *genGoal();
-	Tree planner(&sTest, gTest);
+	Tree planner(&sTest, &gTest);
 	
-	Node * planNode = planner.plan();
+	Node * root = planner.plan();
 	
-	while (planNode != NULL) {
-		cout << planNode << endl;
-		planNode = planNode->parent;
-	}
 	system("pause");
     return 0;
 }

@@ -41,13 +41,12 @@ void Node::Insert(Node * futureState) {
 }
 
 State Node::PickUp(const State * s1, block block1) {
-	bool updated = false;
 	State newState = *s1;
-	Node * futureState;
-
+	
 	int oldLocation = newState.GetLocation(block1);
 	//IF BLOCK CLEAR, IF NOT HOLDING, IS NOT ON (Is on = unstack)
 	if (newState.IsBlockClear(block1) && newState.GetHolding()==-1 && newState.GetOn(block1) == -1) {
+		Node * futureState;
 		//UPDATE HOLDING
 		newState.Holding(&newState, block1); // set holding to block1
 		//UPDATE NOT CLEAR
@@ -55,12 +54,9 @@ State Node::PickUp(const State * s1, block block1) {
 		//UPDATE TABLE			
 		newState.NotTable(&newState, block1);
 		newState.NotLocation(&newState, block1, oldLocation);
-		updated = true;
-	}
-	if (updated) {
 		
 		string steps = ("Pickup(block" + to_string(block1) + ")");
-		step[0]=(steps);
+		//cout << (steps);
 		
 		futureState = new Node(newState, this);
 		//UPDATE STEPS
@@ -73,12 +69,12 @@ State Node::PickUp(const State * s1, block block1) {
 }
 
 State Node::PutDown(const State * s1, block block1, int newLocation) {
-	bool updated = false;
 	State newState = *s1;
-	Node * futureState;
+	
 
 	//PLACE IN EMPTY LOCATION
 	if (newState.GetHolding() == block1 && newState.IsLocationEmpty(newLocation)) {
+		Node * futureState;
 		//TABLE BLOCK
 		newState.Table(&newState, block1);
 		//CLEAR BLOCK
@@ -87,16 +83,14 @@ State Node::PutDown(const State * s1, block block1, int newLocation) {
 		newState.NotHolding(&newState);
 		//PLACE BLOCK
 		newState.Location(&newState, block1, newLocation);
-		updated = true;
-	}
-	if (updated) {
+
 		//string step = ("Pickup(block" + to_string(block1) + ")");
 		futureState = new Node(newState, this);
 		//UPDATE STEPS
 		
 		string steps = 
-		("PutDown(block" + to_string(block1) + ", location" + to_string(newLocation) + ")");
-		step[0]=(steps);
+		("PutDown(block" + to_string(block1) + ", location" + to_string(newLocation) + ")\n");
+		//cout << (steps);
 		
 		Insert(futureState);
 	}
@@ -104,12 +98,12 @@ State Node::PutDown(const State * s1, block block1, int newLocation) {
 }
 
 State Node::UnStack(const State * s1, block block1) {
-	bool updated = false;
 	State newState = *s1;
-	Node * futureState;
+	
 	int oldLocation = newState.GetLocation(block1);
 	//CHECK BLOCK ON, BLOCK CLEAR
 	if (newState.IsBlockClear(block1) && newState.GetOn(block1) != -1) {
+		Node * futureState;
 		//UPDATE HOLDING
 		newState.Holding(&newState, block1); // set holding to block1
 		//UPDATE NOT CLEAR
@@ -121,15 +115,13 @@ State Node::UnStack(const State * s1, block block1) {
 		newState.NotLocation(&newState, block1, oldLocation);
 		//UPDATE ON
 		newState.NotOn(&newState, block1);
-		updated = true;
-	}
-	if (updated) {
+
 		//string step = ("Pickup(block" + to_string(block1) + ")");
 		futureState = new Node(newState, this);
 		//UPDATE STEPS
 		
 		string steps = ("UnStack(block" + to_string(block1) + ")");
-		step[0]=(steps);
+		//cout <<(steps);
 		
 		Insert(futureState);
 	}
@@ -137,39 +129,37 @@ State Node::UnStack(const State * s1, block block1) {
 }
 
 State Node::Stack(const State * s1, block block1, block block2) {
-	bool updated = false;
 	State newState = *s1;
-	Node * futureState;
+	
 	int location = newState.GetLocation(block2);
 	//CHECK HOLDING BLOCK, CLEAR, NOT EQUAL
-	if (newState.GetHolding() == block1 && newState.IsBlockClear(block2)
-		&& block1 != block2) {
+	if (newState.GetHolding() == block1 && newState.IsBlockClear(block2)) {
+		Node * futureState;
 		//NOT HOLDING
 		newState.NotHolding(&newState); 
 		//UPDATE NOT CLEAR
 		newState.NotClear(&newState, block2);//set clear to false
 		//UPDATE LOCATION
-		newState.Location(&newState, block1, block2);
+		newState.Location(&newState, block1, location);
 		//UPDATE ON
 		newState.On(&newState, block1, block2);
 		//UPDATE TOP CLEAR
 		newState.Clear(&newState, block1);
-		updated = true;
-	}
-	if (updated) {
+
 		//string step = ("Pickup(block" + to_string(block1) + ")");
 		futureState = new Node(newState, this);
 		//UPDATE STEPS
 		
-		string steps = ("Stack(block" + to_string(block1) + ", block" + to_string(block2) + ")");
-		step[0]=(steps);
+		string steps;
+		steps=("Stack(block" + to_string(block1) + ", block" + to_string(block2) + ")\n");
+		//cout <<(steps);
 		
 		Insert(futureState);
 	}
 	return newState;
 }
 
-void Node::getAllStates(block first, block second) {
+Node* Node::getAllStates(block first, block second, State* goal) {
 	PickUp(&current, first);
 	PutDown(&current, first, 0);
 	PutDown(&current, first, 1);
@@ -186,12 +176,21 @@ void Node::getAllStates(block first, block second) {
 		UnStack(&current, second);
 		Stack(&current, second, first);
 	}
-	
+	if (leftChild == NULL ) return NULL;
+	Node * ptr = leftChild;
+	while (ptr != NULL) {
+		if ((ptr->current) == *goal) {
+			cout << "FJDKSLJFKLDSJFDKSLJFKSLJFKLSDJ" << endl;
+			return ptr;
+		}
+		ptr = ptr->rightSibling;
+	}
+	return NULL;
 }
 
 ostream & operator<<(std::ostream & os, const Node & obj)
 {
-	os << "Node Step: " << obj.step[0] << endl;
+	//os << "Node Step: " << obj.step[0] << endl;
 	return os;
 }
 

@@ -13,7 +13,7 @@ public:
 	Node * rightSibling;
 	bool * checked;
 	State current;
-	string step[1];
+	//vector<string *> *step;
 	Node();
 	~Node();
 	Node(State, Node *);
@@ -21,7 +21,7 @@ public:
 	State Node::PutDown(const State * , block, int);
 	State Node::UnStack(const State *, block);
 	State Node::Stack(const State *, block, block);
-	void Node::getAllStates(block, block);
+	Node* Node::getAllStates(block, block, State*);
 	void Node::Insert(Node * );
 	//friend ostream& operator<<(std::ostream& os, const Node& obj);
 };

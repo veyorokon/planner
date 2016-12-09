@@ -2,6 +2,7 @@
 #include "State.h"
 #include "Relation.h"
 #include "Node.h"
+
 #define block int
 #define holding 4
 using namespace std;
@@ -16,12 +17,10 @@ public:
 	State * goal;
 	Node * ending;
 
-	Tree(State *newStart, State newGoal)
+	Tree(State *newStart, State * newGoal)
 	{
 		starting = new Node(*newStart, NULL);
-		State nState;
-		goal = &nState;
-		*goal = newGoal;
+		goal = newGoal;
 	}
 
 	~Tree()
@@ -30,14 +29,36 @@ public:
 
 	Node * plan() {
 		vector<State> checked;
-		Node * ptr = (buildTree(starting, checked));
-		starting->parent = ptr;
-		ptr->parent = NULL;
+		(buildTree(starting, 0));
 		return starting;
 	}
 
-	Node* buildTree(Node * root, vector<State> checked) {
-		if (root && root->checked && !(*root->checked)) {
+	Node* buildTree(Node * root, int level) {
+		
+		if (root && level < 3 ) {
+			
+			//Permuations
+			for (int i = 0; i < SIZE; i++) {
+				for (int j = 0; j < SIZE; j++) {
+					Node * ptr = root->getAllStates(i, j, goal);
+					if (ptr && (ptr->current) == *goal) return ptr;
+				}
+			}
+
+			if (root->leftChild) {
+				Node * lc = root->leftChild;
+				buildTree(lc, level + 1);
+				lc = lc->rightSibling;
+				while (lc != NULL) {
+					buildTree(lc, level+1);
+					lc = lc->rightSibling;
+				}
+			}
+		}
+		return root;
+	}
+
+	/*if (root && root->checked && !(*root->checked)) {
 			if (root->current == *goal) {
 				return root;
 			}
@@ -62,8 +83,6 @@ public:
 		if (root) {
 			buildTree(root->rightSibling, checked);
 			buildTree(root->leftChild, checked);
-		}
-	}
-
+		}*/
 };
 
