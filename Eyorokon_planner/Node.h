@@ -11,8 +11,9 @@ public:
 	Node * parent;
 	Node * leftChild;
 	Node * rightSibling;
+	bool * checked;
 	State current;
-	//vector<string> stepsToGetHere;
+	string step[1];
 	Node();
 	~Node();
 	Node(State, Node *);

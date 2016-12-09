@@ -10,8 +10,7 @@ Node::Node() {
 	rightSibling = NULL;
 	State nState;
 	current = nState;
-
-	//*steps[0] = "";
+	checked = false;
 }
 
 Node::~Node()
@@ -22,6 +21,9 @@ Node::Node(State currentState, Node * par)
 {
 	parent = par;
 	current = currentState;
+	leftChild = NULL;
+	rightSibling = NULL;
+	checked = false;
 }
 void Node::Insert(Node * futureState) {
 	if (leftChild == NULL) {
@@ -56,10 +58,10 @@ State Node::PickUp(const State * s1, block block1) {
 		updated = true;
 	}
 	if (updated) {
-		/*
-		string step = ("Pickup(block" + to_string(block1) + ")");
-		stepsToGetHere.push_back(step);
-		*/
+		
+		string steps = ("Pickup(block" + to_string(block1) + ")");
+		step[0]=(steps);
+		
 		futureState = new Node(newState, this);
 		//UPDATE STEPS
 		//
@@ -91,11 +93,11 @@ State Node::PutDown(const State * s1, block block1, int newLocation) {
 		//string step = ("Pickup(block" + to_string(block1) + ")");
 		futureState = new Node(newState, this);
 		//UPDATE STEPS
-		/*
+		
 		string steps = 
 		("PutDown(block" + to_string(block1) + ", location" + to_string(newLocation) + ")");
-		stepsToGetHere.push_back(steps);
-		*/
+		step[0]=(steps);
+		
 		Insert(futureState);
 	}
 	return newState;
@@ -125,10 +127,10 @@ State Node::UnStack(const State * s1, block block1) {
 		//string step = ("Pickup(block" + to_string(block1) + ")");
 		futureState = new Node(newState, this);
 		//UPDATE STEPS
-		/*
+		
 		string steps = ("UnStack(block" + to_string(block1) + ")");
-		stepsToGetHere.push_back(steps);
-		*/
+		step[0]=(steps);
+		
 		Insert(futureState);
 	}
 	return newState;
@@ -158,10 +160,10 @@ State Node::Stack(const State * s1, block block1, block block2) {
 		//string step = ("Pickup(block" + to_string(block1) + ")");
 		futureState = new Node(newState, this);
 		//UPDATE STEPS
-		/*
+		
 		string steps = ("Stack(block" + to_string(block1) + ", block" + to_string(block2) + ")");
-		stepsToGetHere.push_back(steps);
-		*/
+		step[0]=(steps);
+		
 		Insert(futureState);
 	}
 	return newState;
@@ -186,10 +188,10 @@ void Node::getAllStates(block first, block second) {
 	}
 	
 }
-/*
+
 ostream & operator<<(std::ostream & os, const Node & obj)
 {
-	os << "Node Step: " << obj.stepsToGetHere[0] << endl;
+	os << "Node Step: " << obj.step[0] << endl;
 	return os;
 }
-*/
+

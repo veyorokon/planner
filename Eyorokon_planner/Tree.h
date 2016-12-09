@@ -29,25 +29,40 @@ public:
 	}
 
 	Node * plan() {
-		Node * ptr = (buildTree(starting));
+		vector<State> checked;
+		Node * ptr = (buildTree(starting, checked));
 		starting->parent = ptr;
 		ptr->parent = NULL;
 		return starting;
 	}
 
-	Node* buildTree(Node * root) {
-		if (root->current == *goal) {
-			return root;
-		}
-		if (root) {
+	Node* buildTree(Node * root, vector<State> checked) {
+		if (root && root->checked && !(*root->checked)) {
+			if (root->current == *goal) {
+				return root;
+			}
+			//Get Permutations
 			for (int i = 0; i < SIZE; i++) {
 				for (int j = 0; j < SIZE; j++) {
 					root->getAllStates(i, j);
-					if (root->rightSibling) buildTree(root->rightSibling);
 				}
 			}
+			Node * ptr = root;
+			//Check right sibling states
+			while (ptr != NULL) {
+				bool isIn = false;
+				for (int count = 0; count < checked.size(); count++) {
+					if (ptr->current == checked[count]) isIn = true;
+					else *(ptr->checked) = true;
+				}
+				checked.push_back(ptr->current);
+				ptr = ptr->rightSibling;
+			}
 		}
-		return root->leftChild;
+		if (root) {
+			buildTree(root->rightSibling, checked);
+			buildTree(root->leftChild, checked);
+		}
 	}
 
 };
