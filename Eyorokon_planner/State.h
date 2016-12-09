@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "Relation.h"
-
+#include <iostream>
 #define block int
 #define Relation int
 #define SIZE 7
@@ -128,10 +128,18 @@ public:
 	bool IsBlockTable(block block1) {
 		return table[block1];
 	}
-	/*
-	int operator == (State const state) {
-
+	
+	bool operator == (const State state) {
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < SIZE; j++)
+				if (location[i][j] != state.location[i][j]) {
+					cout << "Index: " + to_string(i) + ", " + to_string(j) << endl;
+					cout << "Ours: " + to_string(location[i][j]) + ", " + to_string(state.location[i][j]);
+					return false;
+				}
+		}
+		return true;
 	}
-	*/
+	
 };
 

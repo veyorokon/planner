@@ -52,12 +52,21 @@ int main()
 
 	//Test getAllStates
 	State sTest = *genStart();
+	State sTest2 = sTest;
 	Node nTest;
 	nTest.current = sTest;
 	
 	nTest.getAllStates(0, 0);
 	cout << "Testing Get All States. nTest (node): " << endl ;
 	vector<Node *> fTest = nTest.futureStates;
+
+	//Test state == overload
+	cout << "Location of blk1: " << sTest.GetLocation(1) << endl;
+
+	sTest.Location(&sTest, 1, 2);
+	sTest.NotLocation(&sTest, 1, 2);
+	sTest.Location(&sTest, 1, 0);
+	cout << "Testing state overload == " << (sTest == sTest2) << endl;
 
 	system("pause");
     return 0;

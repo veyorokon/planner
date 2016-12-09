@@ -26,12 +26,20 @@ public:
 	}
 
 	void findPlan() {
-
-		starting->futureStates.push_back(planHelper(0, 0));
+		
 	}
 
-	Node* planHelper(block first, block second) {
-
+	Node* planHelper(block first, block second, vector<Node *> futureStates) {
+		//PERMUTATE
+		for (int i = 0; i < SIZE; i++) {
+			for (int j = 0; j < SIZE; j++)
+				starting->getAllStates(i, j);
+		}
+		/*
+		for (int i = 0; i < futureStates; i++) {
+			if (futureStates[i]->current.
+		}
+		*/
 	}
 
 	
