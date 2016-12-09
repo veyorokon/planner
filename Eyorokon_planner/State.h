@@ -16,16 +16,16 @@
 class State
 {
 private:
-
-public:
-
-
 	int above[7][7];//Relation aboce
-	//block blocks[7];
+					//block blocks[7];
 	Relation location[5][7];//Relation location where index 4 is HOLDING
 	Relation on[7]; //Relation on
 	Relation table[7];//Relation table
 	Relation clear[7];//Relation clear
+public:
+
+
+	
 
 	State()
 	{		
@@ -56,6 +56,10 @@ public:
 		s1->on[block1] = block2;
 		s1->clear[block2] = false;
 		return s1;
+	}
+
+	block GetOn(State* s1, block block1) {
+		return on[block1];
 	}
 
 	State* NotOn(State* s1, block block1, block block2) {
@@ -100,22 +104,24 @@ public:
 		return s1;
 	}
 
-	int getLocation(State * s1, block block1) {
+	int GetLocation(State * s1, block block1) {
 		int currentLocation;
 		for (int i = 0; i < 4; i++) { // 4 locations
 			if (s1->location[i][block1] == 1) return i; //check column for block
 		}
 	}
 
-	int getHolding() {
+	int GetHolding() {
 		return location[holding][0];
 	}
 	
-	bool locationIsEmpty(int loc) {
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < SIZE; j++)
-				if (location[i][j] != -1) return false;
-		}
+	bool IsBlockClear(block block1) {
+		return clear[block1];
+	}
+
+	bool IsLocationEmpty(int loc) {
+		for (int j = 0; j < SIZE; j++)
+			if (location[loc][j] != -1) return false;
 		return true;
 	}
 	/*

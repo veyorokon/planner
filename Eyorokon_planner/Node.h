@@ -12,7 +12,7 @@ public:
 	Node();
 	~Node();
 	Node(State, Node *);
-	State& PickUp(State *, block);
-	State& Node::PutDown(State * , block, int);
+	State PickUp(State *, block);
+	State Node::PutDown(State * , block, int);
 };
 
