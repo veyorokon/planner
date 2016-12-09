@@ -21,8 +21,8 @@ Node::Node(State currentState, Node * par)
 State Node::PickUp(State * s1, block block1) {
 	State newState = *s1;
 	int oldLocation = newState.GetLocation(block1);
-	//IF BLOCK CLEAR, IF BLOCK NOT ON
-	if (newState.IsBlockClear(block1) && newState.IsBlockTable(block1)) {
+	//IF BLOCK CLEAR, IF NOT HOLDING, NOT ON
+	if (newState.IsBlockClear(block1) && newState.GetHolding()==-1 && newState.GetOn(block1) == -1) {
 		//UPDATE HOLDING
 		newState.Holding(&newState, block1); // set holding to block1
 		//UPDATE NOT CLEAR
