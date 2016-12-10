@@ -46,16 +46,22 @@ public:
 		output.open("output.txt");
 		Node * ptr = &planNode;
 		int phase = 0;
-		while (ptr != NULL){
-			output << "\n";
-			output << "-------| " + to_string(phase) + " |-------\n";
-			output << ptr->plan;
+
+		//correct count
+		while (ptr != NULL) {
 			phase++;
 			ptr = ptr->parent;
 		}
+		ptr = &planNode;
+		while (ptr != NULL){
+			output << "\n\n";
+			output << "-------| " + to_string(phase) + " |-------\n";
+			drawState(ptr->current, output);
+			output << ptr->plan;
+			phase--;
+			ptr = ptr->parent;
+		}
 		output.close();
-		drawState(planNode.current, output);
-		
 	}
 
 
@@ -141,9 +147,15 @@ public:
 
 
 		cout << endl;
-
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				myfile << space << array2D[i][j] << space;
+			}
+			//cout << endl;
+			myfile << "\n";
+		}
 		myfile << "|-------------|--------------|--------------|--------------|\n";
-		myfile << "      l1              l2             l3             l4       \n";
+		myfile << "      l1              l2             l3             l4       \n\n\n";
 	}
 
 	void getOrdering( vector<int>& heights, vector<int>& order, State & state) {
