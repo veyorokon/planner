@@ -55,9 +55,10 @@ public:
 		ptr = &planNode;
 		while (ptr != NULL){
 			output << "\n\n";
-			output << "-------| " + to_string(phase) + " |-------\n";
+			output << "|--------------|--------------| " 
+				+ to_string(phase) + " |---------------|--------------| \n";
 			drawState(ptr->current, output);
-			output << ptr->plan;
+			output << "                          "<< ptr->plan;
 			phase--;
 			ptr = ptr->parent;
 		}
@@ -155,7 +156,7 @@ public:
 			myfile << "\n";
 		}
 		myfile << "|-------------|--------------|--------------|--------------|\n";
-		myfile << "      l1              l2             l3             l4       \n\n\n";
+		myfile << "      l0              l1             l2             l3       \n\n\n";
 	}
 
 	void getOrdering( vector<int>& heights, vector<int>& order, State & state) {
