@@ -17,8 +17,9 @@ Node::~Node()
 {
 }
 
-Node::Node(State currentState, Node * par)
+Node::Node(State currentState, Node * par, string step)
 {
+	plan = step;
 	parent = par;
 	current = currentState;
 	leftChild = NULL;
@@ -58,7 +59,7 @@ State Node::PickUp(const State * s1, block block1) {
 		string steps = ("Pickup(block" + to_string(block1) + ")");
 		//cout << (steps);
 		
-		futureState = new Node(newState, this);
+		futureState = new Node(newState, this, steps);
 		//UPDATE STEPS
 		//
 		//futureStates.push_back(futureState);
@@ -85,11 +86,11 @@ State Node::PutDown(const State * s1, block block1, int newLocation) {
 		newState.Location(&newState, block1, newLocation);
 
 		//string step = ("Pickup(block" + to_string(block1) + ")");
-		futureState = new Node(newState, this);
 		//UPDATE STEPS
 		
 		string steps = 
 		("PutDown(block" + to_string(block1) + ", location" + to_string(newLocation) + ")\n");
+		futureState = new Node(newState, this, steps);
 		//cout << (steps);
 		
 		Insert(futureState);
@@ -117,10 +118,10 @@ State Node::UnStack(const State * s1, block block1) {
 		newState.NotOn(&newState, block1);
 
 		//string step = ("Pickup(block" + to_string(block1) + ")");
-		futureState = new Node(newState, this);
 		//UPDATE STEPS
 		
 		string steps = ("UnStack(block" + to_string(block1) + ")");
+		futureState = new Node(newState, this, steps);
 		//cout <<(steps);
 		
 		Insert(futureState);
@@ -147,11 +148,13 @@ State Node::Stack(const State * s1, block block1, block block2) {
 		newState.Clear(&newState, block1);
 
 		//string step = ("Pickup(block" + to_string(block1) + ")");
-		futureState = new Node(newState, this);
+		
 		//UPDATE STEPS
 		
 		string steps;
 		steps=("Stack(block" + to_string(block1) + ", block" + to_string(block2) + ")\n");
+		futureState = new Node(newState, this, steps);
+		
 		//cout <<(steps);
 		
 		Insert(futureState);

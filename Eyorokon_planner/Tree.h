@@ -19,7 +19,8 @@ public:
 
 	Tree(State *newStart, State * newGoal)
 	{
-		starting = new Node(*newStart, NULL);
+		string s = "start";
+		starting = new Node(*newStart, NULL, s);
 		goal = newGoal;
 	}
 
@@ -30,11 +31,14 @@ public:
 	Node * plan() {
 		bool found = false;
 		Node * planNode = new Node();
-		(buildTree(starting, 0, found, planNode));
-		return planNode;
+		(buildTree(starting, 0, found, *planNode));
+		//RETURN LEFT CHILD FORCED!
+		return planNode->leftChild;
 	}
 
-	Node*& buildTree(Node * root, int level, bool &found, Node *& planNode) {
+	/*For whatever reason, the plam node is the left child but it wont return? Instead,
+	its parent is returned.*/
+	Node* buildTree(Node * root, int level, bool &found, Node & planNode) {
 		
 		if (root && level < 3 ) {
 			
@@ -45,7 +49,7 @@ public:
 					if (ptr && (ptr->current) == *goal) {
 						cout << "FOUND FOUND FOUND FOUND FOUDN FOUDN" << endl;
 						found = true;
-						planNode = root;
+						planNode = *root;
 						return ptr;
 					}
 				}
@@ -54,42 +58,17 @@ public:
 			if (root->leftChild && !found) {
 				Node * lc = root->leftChild;
 				buildTree(lc, level + 1, found, planNode);
-				lc = lc->rightSibling;
+				//lc = lc->rightSibling;
 				while (lc != NULL && !found) {
-					buildTree(lc, level+1, found, planNode);
 					lc = lc->rightSibling;
+					if(lc != NULL)
+						buildTree(lc, level + 1, found, planNode);
 				}
 			}
 		}
-		if (found) return planNode;
+		if (found) return &planNode;
 		return root;
 	}
 
-	/*if (root && root->checked && !(*root->checked)) {
-			if (root->current == *goal) {
-				return root;
-			}
-			//Get Permutations
-			for (int i = 0; i < SIZE; i++) {
-				for (int j = 0; j < SIZE; j++) {
-					root->getAllStates(i, j);
-				}
-			}
-			Node * ptr = root;
-			//Check right sibling states
-			while (ptr != NULL) {
-				bool isIn = false;
-				for (int count = 0; count < checked.size(); count++) {
-					if (ptr->current == checked[count]) isIn = true;
-					else *(ptr->checked) = true;
-				}
-				checked.push_back(ptr->current);
-				ptr = ptr->rightSibling;
-			}
-		}
-		if (root) {
-			buildTree(root->rightSibling, checked);
-			buildTree(root->leftChild, checked);
-		}*/
 };
 

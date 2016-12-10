@@ -11,13 +11,13 @@ public:
 	Node * parent;
 	Node * leftChild;
 	Node * rightSibling;
-	//Node * planPtr;
+	string  plan;
 	bool * checked;
 	State current;
 	//vector<string *> *step;
 	Node();
 	~Node();
-	Node(State, Node *);
+	Node(State, Node *, string);
 	State Node::PickUp(const State *, block);
 	State Node::PutDown(const State * , block, int);
 	State Node::UnStack(const State *, block);
