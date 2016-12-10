@@ -28,12 +28,13 @@ public:
 	}
 
 	Node * plan() {
-		vector<State> checked;
-		(buildTree(starting, 0));
-		return starting;
+		bool found = false;
+		Node * planNode = new Node();
+		(buildTree(starting, 0, found, planNode));
+		return planNode;
 	}
 
-	Node* buildTree(Node * root, int level) {
+	Node*& buildTree(Node * root, int level, bool &found, Node *& planNode) {
 		
 		if (root && level < 3 ) {
 			
@@ -41,20 +42,26 @@ public:
 			for (int i = 0; i < SIZE; i++) {
 				for (int j = 0; j < SIZE; j++) {
 					Node * ptr = root->getAllStates(i, j, goal);
-					if (ptr && (ptr->current) == *goal) return ptr;
+					if (ptr && (ptr->current) == *goal) {
+						cout << "FOUND FOUND FOUND FOUND FOUDN FOUDN" << endl;
+						found = true;
+						planNode = root;
+						return ptr;
+					}
 				}
 			}
 
-			if (root->leftChild) {
+			if (root->leftChild && !found) {
 				Node * lc = root->leftChild;
-				buildTree(lc, level + 1);
+				buildTree(lc, level + 1, found, planNode);
 				lc = lc->rightSibling;
-				while (lc != NULL) {
-					buildTree(lc, level+1);
+				while (lc != NULL && !found) {
+					buildTree(lc, level+1, found, planNode);
 					lc = lc->rightSibling;
 				}
 			}
 		}
+		if (found) return planNode;
 		return root;
 	}
 

@@ -180,7 +180,6 @@ Node* Node::getAllStates(block first, block second, State* goal) {
 	Node * ptr = leftChild;
 	while (ptr != NULL) {
 		if ((ptr->current) == *goal) {
-			cout << "FJDKSLJFKLDSJFDKSLJFKSLJFKLSDJ" << endl;
 			return ptr;
 		}
 		ptr = ptr->rightSibling;

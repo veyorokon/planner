@@ -11,6 +11,7 @@ public:
 	Node * parent;
 	Node * leftChild;
 	Node * rightSibling;
+	//Node * planPtr;
 	bool * checked;
 	State current;
 	//vector<string *> *step;

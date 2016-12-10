@@ -77,6 +77,7 @@ int main()
 	Tree planner(&sTest, &gTest);
 	
 	Node * root = planner.plan();
+
 	
 	system("pause");
     return 0;
