@@ -126,7 +126,25 @@ public:
 	bool IsBlockTable(block block1) {
 		return table[block1];
 	}
-	
+
+	/*Return location array [5][7]*/
+	int** getLocations() {
+		int height = 5, width = 7;
+		int** array2D = 0;
+		array2D = new int*[height];
+
+		for (int h = 0; h < height; h++)
+		{
+			array2D[h] = new int[width];
+			for (int w = 0; w < width; w++)
+			{
+				array2D[h][w] = location[h][w];
+			}
+		}
+
+		return array2D;
+	}
+
 	bool operator == (const State state) {
 		if (location == NULL) return false;
 		for (int i = 0; i < 5; i++) {

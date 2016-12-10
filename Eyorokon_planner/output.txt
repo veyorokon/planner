@@ -8,6 +8,11 @@ UnStack(block1)
 PutDown(block0, location2)
 
 -------| 3 |-------
-UnStack(block0)
+Pickup(block0)
 -------| 4 |-------
+PutDown(block0, location2)
+
+-------| 5 |-------
+UnStack(block0)
+-------| 6 |-------
 start

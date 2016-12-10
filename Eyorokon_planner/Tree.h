@@ -50,14 +50,63 @@ public:
 			ptr = ptr->parent;
 		}
 		output.close();
+
+		vector<int> order;
+		getOrdering(order, planNode.current);
+		cout << "Print order " << endl;
+		for (int i = 0; i < order.size(); i++) {
+			cout << order[i] << " ";
+		}
+
 	}
 	void drawState(State & state, ofstream& myfile) {
 		string space = "       ";
+		
 
+		//if(held != -1)
+		//myfile << "                                               holding: Block"+to_string(held)+"\n";
+		
 		myfile << "|-------------|--------------|--------------|--------------|\n";
 		myfile << "      l1              l2             l3             l4       \n";
 	}
 
+	void getOrdering(vector<int>& order, State & state) {
+		int ** locations = state.getLocations();
+		int held = locations[4][0];
+		vector<int> ordering;
+		order.push_back(held);
+		
+		for (int i = 0; i < 4; i++) {
+			block top = getTopBlock(locations, state, i); //Get the topmost block for row
+			addToVec(order, state, top);
+		}
+	}
+
+	/*Returns the top most block*/
+	block getTopBlock(int** locations, State & state, int row) {
+		for (int j = 0; j < 7; j++) {
+			block top = locations[row][j];
+			if (top != -1) {//Check if block is at location
+				if (state.IsBlockClear(j)) {//Check if it's the top
+					return j;
+				}
+			}
+		}
+		return -1;
+	}
+
+
+	void addToVec(vector<int>& order, State & state, block blk) {
+		order.push_back(blk);
+		if (blk == -1) return;
+
+		while (blk != -1) {
+			blk = state.GetOn(blk);
+			order.push_back(blk); //check the next block
+		}
+		//order.push_back(-1); //end of row
+	}
+	
 	/*For whatever reason, the plam node is the left child but it wont return? Instead,
 	its parent is returned.*/
 	Node* buildTree(Node * root, int level, bool &found, Node & planNode) {
